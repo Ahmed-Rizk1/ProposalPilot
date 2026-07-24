@@ -4,13 +4,7 @@
 
 ProposalPilot transforms how teams create winning sales proposals. By uploading company knowledge documents (PDFs, DOCX, TXT), ProposalPilot leverages **Retrieval-Augmented Generation (RAG)** and **Groq (Llama 3.3 70B)** to generate tailored, highly relevant enterprise sales proposals with live AI interactive chat editing and professional PDF export.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://proposal-pilot-eight.vercel.app/)
-[![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20TypeScript%20%7C%20Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://proposal-pilot-eight.vercel.app/)
-[![Backend](https://img.shields.io/badge/Backend-FastAPI%20%7C%20Python-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://proposal-pilot-eight.vercel.app/)
-[![Database](https://img.shields.io/badge/Database-Supabase%20PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
-[![AI Engine](https://img.shields.io/badge/AI Engine-Groq%20Llama%203.3-F05032?style=for-the-badge&logo=groq&logoColor=white)](https://groq.com)
 
----
 
 ## 🔗 Live Application
 
