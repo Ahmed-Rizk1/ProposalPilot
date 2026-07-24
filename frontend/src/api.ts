@@ -1,4 +1,13 @@
-const BASE = '/api'
+import { env } from './lib/env'
+
+function getBaseUrl(): string {
+  const custom = env.VITE_API_BASE_URL
+  if (!custom) return '/api'
+  const clean = custom.replace(/\/$/, '')
+  return clean.endsWith('/api') ? clean : `${clean}/api`
+}
+
+const BASE = getBaseUrl()
 
 function getToken(): string | null {
   return localStorage.getItem('token')
@@ -16,6 +25,34 @@ export function isLoggedIn(): boolean {
   return !!getToken()
 }
 
+async function handleResponse<T>(res: Response): Promise<T> {
+  if (res.status === 401) {
+    clearToken()
+    window.location.href = '/login'
+    throw new Error('Session expired')
+  }
+
+  const contentType = res.headers.get('content-type') || ''
+  if (!contentType.includes('application/json')) {
+    const text = await res.text()
+    if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+      throw new Error(
+        `API returned HTML instead of JSON (Status ${res.status}). Please check VITE_API_BASE_URL in Vercel settings.`
+      )
+    }
+    if (!res.ok) {
+      throw new Error(text || `HTTP ${res.status} ${res.statusText}`)
+    }
+  }
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ detail: res.statusText }))
+    throw new Error(body.detail || 'Request failed')
+  }
+
+  return res.json()
+}
+
 async function req<T>(url: string, init?: RequestInit): Promise<T> {
   const token = getToken()
   const headers: Record<string, string> = {
@@ -25,17 +62,7 @@ async function req<T>(url: string, init?: RequestInit): Promise<T> {
   if (token) headers['Authorization'] = `Bearer ${token}`
 
   const res = await fetch(`${BASE}${url}`, { ...init, headers })
-
-  if (res.status === 401) {
-    clearToken()
-    window.location.href = '/login'
-    throw new Error('Session expired')
-  }
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({ detail: res.statusText }))
-    throw new Error(body.detail || 'Request failed')
-  }
-  return res.json()
+  return handleResponse<T>(res)
 }
 
 async function reqUpload<T>(url: string, file: File): Promise<T> {
@@ -46,11 +73,7 @@ async function reqUpload<T>(url: string, file: File): Promise<T> {
   if (token) headers['Authorization'] = `Bearer ${token}`
 
   const res = await fetch(`${BASE}${url}`, { method: 'POST', headers, body: form })
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({ detail: res.statusText }))
-    throw new Error(body.detail || 'Upload failed')
-  }
-  return res.json()
+  return handleResponse<T>(res)
 }
 
 export const api = {
