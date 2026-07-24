@@ -1,0 +1,44 @@
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker volumes (local data)
+docker/pgdata/
+
+# Generated files
+generated_proposals/
+*.pdf
+uploads/
+*.log
+nul
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# Embedding model cache
+models/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
