@@ -1,4 +1,4 @@
-# 🚀 ProposalPilot
+#  ProposalPilot
 
 > **AI-Powered Enterprise Sales Proposal Generator with Multi-Format Document RAG**
 
@@ -6,25 +6,25 @@ ProposalPilot transforms how teams create winning sales proposals. By uploading 
 
 
 
-## 🔗 Live Application
+##  Live Application
 
 - **Live Web Application:** [https://proposal-pilot-eight.vercel.app/](https://proposal-pilot-eight.vercel.app/)
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-- 📄 **Multi-Format Document RAG**: Upload PDFs, Word documents (`.docx`), and text files (`.txt`). Automatically chunks and embeds documents for context-aware retrieval.
-- ⚡ **AI Sales Proposal Generation**: Powered by Groq's Llama 3.3 70B model for ultra-fast generation of enterprise sales proposals tailored to client demands and company context.
-- 💬 **Live AI Proposal Chatbot**: Interactively edit, refine, expand, or rewrite generated proposals using a live AI assistant.
-- 📥 **Export to PDF & DOCX**: Download generated proposals as clean, professionally styled PDF documents or editable text files.
-- 🏢 **Organization Branding**: Configure company profiles, default proposal guidelines, and branding context applied across all proposals.
-- 🔒 **Secure Auth**: JWT token-based authentication and secure session management.
-- 📊 **Metrics & Observability**: Real-time performance tracking and system metrics monitoring endpoints.
+-  **Multi-Format Document RAG**: Upload PDFs, Word documents (`.docx`), and text files (`.txt`). Automatically chunks and embeds documents for context-aware retrieval.
+-  **AI Sales Proposal Generation**: Powered by Groq's Llama 3.3 70B model for ultra-fast generation of enterprise sales proposals tailored to client demands and company context.
+-  **Live AI Proposal Chatbot**: Interactively edit, refine, expand, or rewrite generated proposals using a live AI assistant.
+-  **Export to PDF & DOCX**: Download generated proposals as clean, professionally styled PDF documents or editable text files.
+-  **Organization Branding**: Configure company profiles, default proposal guidelines, and branding context applied across all proposals.
+-  **Secure Auth**: JWT token-based authentication and secure session management.
+-  **Metrics & Observability**: Real-time performance tracking and system metrics monitoring endpoints.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology | Description |
 |-------|-----------|-------------|
@@ -37,7 +37,7 @@ ProposalPilot transforms how teams create winning sales proposals. By uploading 
 
 ---
 
-## 📂 Repository Structure
+##  Repository Structure
 
 ```text
 proposalpilot/
@@ -66,7 +66,7 @@ proposalpilot/
 
 ---
 
-## 🌐 Environment Variables
+##  Environment Variables
 
 ### Backend Configuration (`backend/.env`)
 
@@ -85,7 +85,7 @@ proposalpilot/
 
 ---
 
-## 🚀 Deployment Guide
+##  Deployment Guide
 
 ### 1. Database (Supabase PostgreSQL)
 1. Create a project on [Supabase](https://supabase.com/).
@@ -106,7 +106,7 @@ proposalpilot/
 
 ---
 
-## 💻 Local Development
+##  Local Development
 
 ### Prerequisites
 - Python 3.11+
@@ -135,7 +135,7 @@ npm run dev
 
 ---
 
-## 🔌 Core API Endpoints
+##  Core API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -151,6 +151,6 @@ npm run dev
 
 ---
 
-## 📄 License
+##  License
 
 Distributed under the MIT License.
