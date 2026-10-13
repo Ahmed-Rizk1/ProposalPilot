@@ -202,20 +202,9 @@ def chat_edit_proposal(
 
     model_name = _get_model()
     try:
-        response = groq_client.chat.completions.create(
-            model=model_name,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_prompt},
-            ],
-            max_tokens=3800,
-            temperature=0.2,
-            response_format={"type": "json_object"}
-        )
-    except Exception as e:
-        if "model_not_found" in str(e) and model_name != "openai/gpt-oss-20b":
+        try:
             response = groq_client.chat.completions.create(
-                model="openai/gpt-oss-20b",
+                model=model_name,
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": user_prompt},
@@ -224,11 +213,23 @@ def chat_edit_proposal(
                 temperature=0.2,
                 response_format={"type": "json_object"}
             )
-        else:
-            raise e
+        except Exception as e:
+            if "model_not_found" in str(e) and model_name != "openai/gpt-oss-20b":
+                response = groq_client.chat.completions.create(
+                    model="openai/gpt-oss-20b",
+                    messages=[
+                        {"role": "system", "content": system},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    max_tokens=3800,
+                    temperature=0.2,
+                    response_format={"type": "json_object"}
+                )
+            else:
+                raise e
+
         raw = response.choices[0].message.content or ""
         data = json.loads(raw)
-        
         ai_resp = data.get("ai_response", "I updated the proposal based on your request.")
         updated_prop = data.get("updated_proposal", current_content)
         return updated_prop, ai_resp
@@ -239,4 +240,4 @@ def chat_edit_proposal(
             f"Revise this proposal according to request: {user_message}\n\nProposal:\n{current_content}"
         )
         new_text = generate_text(fallback_prompt, "You are a professional proposal editor. Return updated proposal markdown.")
-        return new_text, f"I have revised the proposal according to your feedback."
+        return new_text, "I have revised the proposal according to your feedback."

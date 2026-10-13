@@ -34,7 +34,8 @@ def generate_pdf_canvas(filepath: str, client_name: str, content: str, language:
             y = height - 50
             
         line_str = line.strip()
-        clean_text = line_str.replace("**", "").replace("*", "").replace("###", "").replace("##", "").replace("#", "").strip()
+        clean_text = line_str.replace("■", "-").replace("**", "").replace("*", "").replace("###", "").replace("##", "").replace("#", "").strip()
+        clean_text = clean_text.encode("latin-1", errors="replace").decode("latin-1")
         
         if not clean_text:
             y -= 8

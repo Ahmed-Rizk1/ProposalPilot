@@ -182,7 +182,10 @@ def chat_with_proposal_ai(
     p.pdf_path = None # invalidate old PDF path so fresh PDF is created
     db.commit()
 
-    ensure_proposal_pdf(p, db, user)
+    try:
+        ensure_proposal_pdf(p, db, user)
+    except Exception as pdf_err:
+        print(f"[WARNING] PDF generation during chat deferred: {pdf_err}")
     return serialize_proposal(p)
 
 
