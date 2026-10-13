@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     DATABASE_URL: str = "sqlite:///./proposalpilot.db"
     GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.1-8b-instant"
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
     JWT_SECRET: str = "dev-secret-key-proposalpilot-2026"

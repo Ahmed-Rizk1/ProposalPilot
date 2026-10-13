@@ -4,6 +4,9 @@ from config import settings
 
 groq_client = Groq(api_key=settings.GROQ_API_KEY) if settings.GROQ_API_KEY else None
 
+def _get_model() -> str:
+    return getattr(settings, "GROQ_MODEL", "llama-3.1-8b-instant") or "llama-3.1-8b-instant"
+
 def generate_text(prompt: str, system_prompt: str = "") -> str:
     if not groq_client or not settings.GROQ_API_KEY:
         return (
@@ -15,15 +18,27 @@ def generate_text(prompt: str, system_prompt: str = "") -> str:
         messages.append({"role": "system", "content": system_prompt})
     messages.append({"role": "user", "content": prompt})
 
+    model_name = _get_model()
     try:
         response = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=model_name,
             messages=messages,
             max_tokens=3000,
             temperature=0.3,
         )
         return response.choices[0].message.content or ""
     except Exception as e:
+        if "model_not_found" in str(e) and model_name != "llama-3.1-8b-instant":
+            try:
+                response = groq_client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=messages,
+                    max_tokens=3000,
+                    temperature=0.3,
+                )
+                return response.choices[0].message.content or ""
+            except Exception as fallback_e:
+                return f"Error connecting to Groq API: {str(fallback_e)}"
         return f"Error connecting to Groq API: {str(e)}"
 
 
@@ -49,15 +64,30 @@ def extract_products_from_text(text: str) -> list[dict]:
         '- Format: {"products": [{...}, ...]}'
     )
 
-    response = groq_client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": f"Extract products from this text:\n\n{text}"},
-        ],
-        max_tokens=3500,
-        temperature=0.1,
-    )
+    model_name = _get_model()
+    try:
+        response = groq_client.chat.completions.create(
+            model=model_name,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": f"Extract products from this text:\n\n{text}"},
+            ],
+            max_tokens=3500,
+            temperature=0.1,
+        )
+    except Exception as e:
+        if "model_not_found" in str(e) and model_name != "llama-3.1-8b-instant":
+            response = groq_client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": f"Extract products from this text:\n\n{text}"},
+                ],
+                max_tokens=3500,
+                temperature=0.1,
+            )
+        else:
+            raise e
 
     raw = (response.choices[0].message.content or "").strip()
     if raw.startswith("```"):
@@ -170,9 +200,10 @@ def chat_edit_proposal(
         f"Return ONLY valid JSON with 'ai_response' and 'updated_proposal'."
     )
 
+    model_name = _get_model()
     try:
         response = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=model_name,
             messages=[
                 {"role": "system", "content": system},
                 {"role": "user", "content": user_prompt},
@@ -181,6 +212,20 @@ def chat_edit_proposal(
             temperature=0.2,
             response_format={"type": "json_object"}
         )
+    except Exception as e:
+        if "model_not_found" in str(e) and model_name != "llama-3.1-8b-instant":
+            response = groq_client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_prompt},
+                ],
+                max_tokens=3800,
+                temperature=0.2,
+                response_format={"type": "json_object"}
+            )
+        else:
+            raise e
         raw = response.choices[0].message.content or ""
         data = json.loads(raw)
         
