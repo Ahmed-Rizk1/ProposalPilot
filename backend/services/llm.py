@@ -5,7 +5,7 @@ from config import settings
 groq_client = Groq(api_key=settings.GROQ_API_KEY) if settings.GROQ_API_KEY else None
 
 def _get_model() -> str:
-    return getattr(settings, "GROQ_MODEL", "llama-3.1-8b-instant") or "llama-3.1-8b-instant"
+    return getattr(settings, "GROQ_MODEL", "openai/gpt-oss-20b") or "openai/gpt-oss-20b"
 
 def generate_text(prompt: str, system_prompt: str = "") -> str:
     if not groq_client or not settings.GROQ_API_KEY:
@@ -28,10 +28,10 @@ def generate_text(prompt: str, system_prompt: str = "") -> str:
         )
         return response.choices[0].message.content or ""
     except Exception as e:
-        if "model_not_found" in str(e) and model_name != "llama-3.1-8b-instant":
+        if "model_not_found" in str(e) and model_name != "openai/gpt-oss-20b":
             try:
                 response = groq_client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
+                    model="openai/gpt-oss-20b",
                     messages=messages,
                     max_tokens=3000,
                     temperature=0.3,
@@ -76,9 +76,9 @@ def extract_products_from_text(text: str) -> list[dict]:
             temperature=0.1,
         )
     except Exception as e:
-        if "model_not_found" in str(e) and model_name != "llama-3.1-8b-instant":
+        if "model_not_found" in str(e) and model_name != "openai/gpt-oss-20b":
             response = groq_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": f"Extract products from this text:\n\n{text}"},
@@ -213,9 +213,9 @@ def chat_edit_proposal(
             response_format={"type": "json_object"}
         )
     except Exception as e:
-        if "model_not_found" in str(e) and model_name != "llama-3.1-8b-instant":
+        if "model_not_found" in str(e) and model_name != "openai/gpt-oss-20b":
             response = groq_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": user_prompt},

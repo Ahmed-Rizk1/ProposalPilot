@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     DATABASE_URL: str = "sqlite:///./proposalpilot.db"
     GROQ_API_KEY: str = ""
-    GROQ_MODEL: str = "llama-3.1-8b-instant"
+    GROQ_MODEL: str = "openai/gpt-oss-20b"
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
     JWT_SECRET: str = "dev-secret-key-proposalpilot-2026"
